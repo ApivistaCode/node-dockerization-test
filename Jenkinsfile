@@ -30,6 +30,6 @@ pipeline {
     }
     cleanup {
       sh "docker rmi ${env.REGISTRY}/${env.IMAGE} || exit 0"
-    }
+    } 
   }
 }
