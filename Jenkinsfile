@@ -5,7 +5,7 @@ pipeline {
     def scmVars = checkout scm
     IMAGE='node-web-app'
     REGISTRY='finneganhu'
-    CREDENTIAL='luck_dragons'
+    CREDENTIAL='finneganhu_dockerhub'
     dockerImage=''
   }
 
