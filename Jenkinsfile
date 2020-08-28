@@ -33,7 +33,7 @@ pipeline {
       wsCleaner()
     }
     cleanup {
-      sh "docker rmi ${env.REGISTRY}/${env.IMAGE} || exit 0"
+      sh "docker rmi ${env.NAMESPACE}/${env.IMAGE} || exit 0"
     } 
   }
 }
