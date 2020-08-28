@@ -6,6 +6,7 @@ pipeline {
     IMAGE='node-web-app'
     NAMESPACE='finneganhu'
     REGCREDS='finneganhu_dockerhub'
+    TAG_NAME='latest'
   }
 
   options {
@@ -20,7 +21,7 @@ pipeline {
         buildPushImage(
           namespace: "${env.NAMESPACE}",
           image: "${env.IMAGE}",
-          tag: "lastest",
+          tag: "${env.TAG_NAME}",
           credentials: "${env.REGCREDS}"
         )
       }
@@ -33,7 +34,7 @@ pipeline {
       wsCleaner()
     }
     cleanup {
-      sh "docker rmi ${env.NAMESPACE}/${env.IMAGE} || exit 0"
+      sh "docker rmi ${env.NAMESPACE}/${env.IMAGE}:${env.TAG_NAME} || exit 0"
     } 
   }
 }
