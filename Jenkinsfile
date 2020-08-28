@@ -5,6 +5,8 @@ pipeline {
     def scmVars = checkout scm
     IMAGE='node-web-app'
     REGISTRY='finneganhu'
+    CREDENTIAL='luck_dragons'
+    dockerImage=''
   }
 
   options {
@@ -14,11 +16,36 @@ pipeline {
   }
 
   stages {
-    stage('Build Image') {
+    // stage('Build Image') {
+    //   steps {
+    //     sh """
+    //       docker build -t ${env.REGISTRY}/${env.IMAGE}:latest .
+    //     """
+    //   }
+    // }
+    // stage('Push Image to Registry') {
+    //   steps {
+    //     script {
+    //       docker.withRegistry( '', registryCredential ) {
+    //       dockerImage.push()
+    //       }
+    //     }
+    //   }
+    // }
+    stage('Build image') {
       steps {
-        sh """
-          docker build -t ${env.REGISTRY}/${env.IMAGE}:latest .
-        """
+        script {
+          dockerImage = docker.build REGISTRY + "/" + IMAGE + ":latest"
+        }
+      }
+    }
+    stage('Deploy image') {
+      steps {
+        script {
+          docker.withRegistry( '', CREDENTIAL ) {
+            dockerImage.push
+          }
+        }
       }
     }
   }
