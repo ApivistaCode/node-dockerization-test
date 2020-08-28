@@ -4,9 +4,8 @@ pipeline {
   environment {
     def scmVars = checkout scm
     IMAGE='node-web-app'
-    REGISTRY='finneganhu'
-    CREDENTIAL='finneganhu_dockerhub'
-    dockerImage=''
+    NAMESPACE='finneganhu'
+    REGCREDS='finneganhu_dockerhub'
   }
 
   options {
@@ -16,36 +15,13 @@ pipeline {
   }
 
   stages {
-    // stage('Build Image') {
-    //   steps {
-    //     sh """
-    //       docker build -t ${env.REGISTRY}/${env.IMAGE}:latest .
-    //     """
-    //   }
-    // }
-    // stage('Push Image to Registry') {
-    //   steps {
-    //     script {
-    //       docker.withRegistry( '', registryCredential ) {
-    //       dockerImage.push()
-    //       }
-    //     }
-    //   }
-    // }
-    stage('Build image') {
+    stage('Build, tag and push release to registry') {
       steps {
-        script {
-          dockerImage = docker.build REGISTRY + "/" + IMAGE + ":latest"
-        }
-      }
-    }
-    stage('Deploy image') {
-      steps {
-        script {
-          docker.withRegistry( '', CREDENTIAL ) {
-            dockerImage.push
-          }
-        }
+        buildPushImage(
+          namespace: "${env.NAMESPACE}",
+          image: "${env.IMAGE}",
+          credentials: "${env.REGCREDS}"
+        )
       }
     }
   }
