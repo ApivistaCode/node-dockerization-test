@@ -20,6 +20,7 @@ pipeline {
         buildPushImage(
           namespace: "${env.NAMESPACE}",
           image: "${env.IMAGE}",
+          tag: "lastest",
           credentials: "${env.REGCREDS}"
         )
       }
